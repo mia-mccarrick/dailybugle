@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daily Bugle</title>
+    <style>
+       .navbar {
+            background-color: #598066;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .navbar h1 {
+            font-size: 24px;
+            margin: 0;
+            text-align: center;
+            left: 50%;
+            flex: 1;
+        }
+
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .navbar a:hover {
+            background-color: #f1f1f1;
+            color: #3a4f58;
+        }
+
+        .navbar input[type="search"] {
+            padding: 8px 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-left: 15px;
+            transition: all 0.3s;
+        }
+        .navbar input[type="search"]:focus {
+            border-color: #3a4f58;
+            outline: none;
+        }
+        .nav-btn {
+        background-color: #002f03; 
+        color: #fff;
+        padding: 10px 20px; 
+        font-size: 14px; 
+        border: none;
+        border-radius: 6px; 
+        cursor: pointer;
+        transition: all 0.3s ease; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+        text-transform: uppercase; 
+        margin: 10px;
+    }
+
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 1; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(62, 65, 72, 0.6); 
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 30px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 900px;
+            max-height: 80%; 
+            overflow-y: auto; 
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem; 
+        }
+
+        .modal-content h3, .modal-content h2 {
+            font-size: 1.6em;
+            margin-bottom: 0.5rem;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .container {
+            width: 85%;
+            margin: 20px auto;
+        }
+        .story-box {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        .story-box:hover {
+            background-color: #aabeb0;  
+            cursor: pointer;  
+        }
+
+        .story-box img {
+            width: 150px;
+            height: auto;
+            margin-right: 20px;
+            border-radius: 8px;
+        }
+
+        .story-box h2 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .story-box p {
+            font-size: 1em;
+            color: #555;
+        }
+
+        .headline-story {
+            background-color: #f8fafc;
+            font-size: 1.4em;
+            border: 2px solid #aaa;
+            padding: 20px;
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .headline-story:hover{
+            background-color: #aabeb0;  
+            cursor: pointer; 
+
+        }
+
+        .headline-story img {
+            width: 150px;
+            margin-bottom: 10px;
+        }
+
+        .headline-story h2 {
+            font-size: 2em;
+        }
+        #storiesList {
+        list-style-type: none;  
+        padding: 10px;  
+        margin: 10px; 
+        }
+
+        #storiesList li {
+            margin-bottom: 15px;  
+        }
+        .searchWrapper{
+            display: flex;
+            flex-direction: column;
+            gap: .25rem;
+        }
+        #newStory{
+            display: none;
+        }
+
+        #commentsList {
+            list-style-type: none;  
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;  
+        }
+        #commentsList li {
+            background-color: #f9f9f9;  
+            border: 1px solid #ddd;  
+            border-radius: 6px; 
+            padding: 10px; 
+            font-size: 1em;
+            color: #333;  
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);  
+        }
+        input {
+            font-family: "Times New Roman", serif;
+            font-size: 16px;
+        }
+        .input, label{
+            margin: 5px;
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <button id="loginBtn" class="nav-btn">Login</button>
+        <h1>Welcome to the Daily Bugle!</h1>
+        <div class="searchWrapper">
+            <input type="search" id="search" placeholder="Search stories...">
+        </div>
+
+        <button id="newStory" class="nav-btn">+ New Story</button>
+
+    </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h1>Login to Daily Bugle</h1>
+            <form id="loginForm">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <button type="submit" class="nav-btn">Login</button>
+            </form>
+            <p id="error" class="error"></p>
+        </div>
+    </div>
+
+    <div class="container" id="homeContent" style="display: none;">
+        <div id="headlineStory"></div> 
+        <div id="advertisement"></div>
+        <ul id="storiesList"></ul>
+    </div>
+
+
+
+    <div id="storyModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeStoryModal">&times;</span>
+            <h2 id="storyTitle"></h2>
+            <p id="storyTeaser"></p>
+            <p id="storyCategories"></p>
+            <img id="storyImage" src="" alt="Story image" style="width: 100%; height: auto;">
+            <p id="storyBody"></p>
+            <div id="storyAd"></div>
+            <div id="commentsSection">
+                <h3>Comments</h3>
+                <ul id="commentsList"></ul>
+                <div id="addCommentSection" style="display: none;">
+                    <textarea id="newComment" placeholder="Add a comment..."></textarea>
+                    <button id="submitComment" class="nav-btn">Submit Comment</button>
+                </div>
+            </div>
+    
+            <div id="editStorySection" style="display: none;" class="edit">
+                <h3>Edit Story</h3>
+                <div class="input">
+                    <label for="editTitle">Title:</label>
+                    <input type="text" id="editTitle" name="editTitle" />
+                </div>
+                <div class="input">
+                    <label for="editTeaser">Teaser:</label>
+                    <textarea id="editTeaser" name="editTeaser"></textarea>
+                </div>
+                <div class="input">
+                    <label for="editBody">Body:</label>
+                    <textarea id="editBody" name="editBody"></textarea>
+                </div>
+                <div class="input">
+                    <label for="editCategories">Categories:</label>
+                    <textarea id="editCategories" name="editCategories"></textarea>
+                </div>
+                <div class="input">
+                    <button id="submitEdit" class="nav-btn">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="newStorySection" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeNewStory">&times;</span>
+            <h3>Write New Story</h3>
+            <label for="addTitle">Title:</label>
+            <input type="text" id="addTitle"/>
+            <label for="addTeaser">Teaser:</label>
+            <textarea id="addTeaser"></textarea>
+            <label for="addBody">Body:</label>
+            <textarea id="addBody"></textarea>
+            <label for="addCategories">Categories:</label>
+            <input type="text" id="addCategories"/>
+            <button id="submitStory" class="nav-btn">Save Changes</button>
+        </div>
+    </div>
+
+    <script src="control.js"></script>
+</body>
+</html>

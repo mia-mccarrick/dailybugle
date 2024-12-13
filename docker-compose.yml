@@ -1,0 +1,57 @@
+services:
+  frontend:
+    build:
+      context: ./front  
+    ports:
+      - "3000:80"  
+    networks:
+      - app-network
+    depends_on:
+      - users    
+      - ad_event
+      - stories
+  users:
+    build:
+      context: ./back/users  
+    ports:
+      - "3030:3010"  
+    networks:
+      - app-network
+    depends_on:
+      - mongodb 
+  ad_event:
+    build:
+      context: ./back/ad_event  
+    ports:
+      - "3033:3013" 
+    networks:
+      - app-network
+    depends_on:
+      - mongodb
+
+  stories:
+    build:
+      context: ./back/stories  
+    ports:
+      - "3031:3011" 
+    networks:
+      - app-network
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest  
+    ports:
+      - "27017:27017"  
+    networks:
+      - app-network
+    volumes:
+    - /Users/miamccarrick/sites/mongod/data/db:/data/db
+
+networks:
+  app-network:
+    driver: bridge  
+
+volumes:
+  mongodb-data:
+    driver: local 
